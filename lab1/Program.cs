@@ -13,7 +13,7 @@ namespace lab1
             int n = 100;
             int[,] a = new int[n, n];
             int[,] b = new int[n, n];
-            for (int i = 0; i < a.GetLength(0); i++)
+            for (int i = 0; i < n; i++)
             {
                 for (int j = 0; j < n; j++)
                 {
