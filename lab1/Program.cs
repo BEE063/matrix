@@ -24,13 +24,16 @@ namespace lab1
             
             int[,] r = new int[n, n];
 
-            Thread[] threadArr = new Thread[n];
+            int myThreads = 4;
+            int calculatedStrings = n / myThreads;
+
+            Thread[] threadArr = new Thread[myThreads];
             var watch = System.Diagnostics.Stopwatch.StartNew();
-            for (int i=0; i < threadArr.Length; i++)
+            for (int i=0; i < myThreads; i++)
             {
-                int row = i;
-                threadArr[i] = new Thread(new ParameterizedThreadStart(s =>Mult(a, b, r, row)));
-                threadArr[i].Name = string.Format("Thread {0} :", i + 1);
+                int start = i * calculatedStrings;
+                int end = start + calculatedStrings - 1;
+                threadArr[i] = new Thread(new ParameterizedThreadStart(s =>Mult(a, b, r, start, end, n)));
                 threadArr[i].Start();
             }
             var elapsedMs = watch.ElapsedMilliseconds;
@@ -43,25 +46,27 @@ namespace lab1
             }
 
             var watch2 = System.Diagnostics.Stopwatch.StartNew();
-            for (int i = 0; i < a.GetLength(0); i++)
-            {
-                Mult(a, b, r, i);
-            }
+            
+            Mult(a, b, r, 0, n-1, n);
+            
             Console.WriteLine("Время однопоточного метода " + watch2.ElapsedMilliseconds);
 
-            /*Print(a);
-            Print(b);
-            Print(r);*/
+            //Print(a);
+            //Print(b);
+            //Print(r);
 
             Console.ReadLine();
         }
-        static void Mult(int[,] first, int[,] second, int[,] result, int i)
+        static void Mult(int[,] first, int[,] second, int[,] result, int start, int end, int size)
         {
-            for (int j = 0; j < first.GetLength(0); j++)
+            for (int i = start; i <= end; i++)
             {
-                for (int k = 0; k < second.GetLength(0); k++)
+                for (int j = 0; j < size; j++)
                 {
-                    result[i, j] += first[i, k] * second[k, j];
+                    for (int k = 0; k < size; k++)
+                    {
+                        result[i, j] += first[i, k] * second[k, j];
+                    }
                 }
             }
 
