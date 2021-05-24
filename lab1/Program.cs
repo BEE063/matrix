@@ -33,7 +33,7 @@ namespace lab1
             {
                 int start = i * calculatedStrings;
                 int end = start + calculatedStrings - 1;
-                threadArr[i] = new Thread(new ParameterizedThreadStart(s =>Mult(a, b, r, start, end, n)));
+                threadArr[i] = new Thread(new ParameterizedThreadStart(s =>Mult(a, b, r, start, end)));
                 threadArr[i].Start();
             }
             var elapsedMs = watch.ElapsedMilliseconds;
@@ -47,7 +47,7 @@ namespace lab1
 
             var watch2 = System.Diagnostics.Stopwatch.StartNew();
             
-            Mult(a, b, r, 0, n-1, n);
+            Mult(a, b, r, 0, n-1);
             
             Console.WriteLine("Время однопоточного метода " + watch2.ElapsedMilliseconds);
 
@@ -57,13 +57,13 @@ namespace lab1
 
             Console.ReadLine();
         }
-        static void Mult(int[,] first, int[,] second, int[,] result, int start, int end, int size)
+        static void Mult(int[,] first, int[,] second, int[,] result, int start, int end)
         {
             for (int i = start; i <= end; i++)
             {
-                for (int j = 0; j < size; j++)
+                for (int j = 0; j < first.GetLength(0); j++)
                 {
-                    for (int k = 0; k < size; k++)
+                    for (int k = 0; k < first.GetLength(0); k++)
                     {
                         result[i, j] += first[i, k] * second[k, j];
                     }
